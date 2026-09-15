@@ -1,0 +1,221 @@
+:root {
+  --primary: #025BC3;
+  --primary-dark: #013F87;
+  --primary-light: #EAF2FC;
+  --accent: #FDC108;
+  --red: #DC4B34;
+  --bg: #F5F8FC;
+  --card: #FFFFFF;
+  --text: #1A2733;
+  --text-muted: #6B7A8A;
+  --border: #E1E8F0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header.topbar {
+  background: var(--primary);
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header.topbar h1 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 700;
+}
+
+header.topbar button {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Login */
+.login-box {
+  max-width: 380px;
+  margin: 80px auto;
+  background: var(--card);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(2, 91, 195, 0.08);
+  text-align: center;
+}
+
+.login-box h2 {
+  color: var(--primary);
+  margin-top: 0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Cards / forms */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: var(--primary);
+  font-size: 16px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 12px 0 6px;
+}
+
+input[type="text"], input[type="password"], textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+textarea { min-height: 100px; resize: vertical; }
+
+.row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+button.primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+button.primary:hover { background: var(--primary-dark); }
+
+button.danger {
+  background: none;
+  color: var(--red);
+  border: 1px solid var(--red);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Listas */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.list-item:last-child { border-bottom: none; }
+
+.list-item .info { flex: 1; min-width: 0; }
+.list-item .info strong { display: block; font-size: 14px; }
+.list-item .info span { font-size: 12px; color: var(--text-muted); }
+
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--primary);
+  color: white;
+  margin-right: 6px;
+}
+
+.badge.gris { background: #AAB4BE; }
+.badge.dorado { background: var(--accent); color: #6b4e00; }
+
+.actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.msg { font-size: 13px; margin-top: 10px; }
+.msg.ok { color: #1a8b3f; }
+.msg.error { color: var(--red); }
+
+.empty-text {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.help-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}

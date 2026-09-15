@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin — Iglesia Pueblo Fuerte</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="vistaLogin" class="login-box">
+  <h2>Iglesia Pueblo Fuerte</h2>
+  <p class="help-text">Panel administrativo</p>
+  <label for="inputClave">Clave de administrador</label>
+  <input type="password" id="inputClave" placeholder="Pégala aquí">
+  <button class="primary" onclick="iniciarSesion()" style="width:100%">Entrar</button>
+  <p id="msgLogin" class="msg"></p>
+</div>
+
+<!-- PANEL -->
+<div id="vistaPanel" style="display:none">
+  <header class="topbar">
+    <h1>Iglesia Pueblo Fuerte — Admin</h1>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="anuncios" onclick="cambiarTab('anuncios')">Anuncios</button>
+      <button class="tab-btn" data-tab="eventos" onclick="cambiarTab('eventos')">Eventos</button>
+      <button class="tab-btn" data-tab="peticiones" onclick="cambiarTab('peticiones')">Peticiones</button>
+    </div>
+
+    <!-- ═══════════ ANUNCIOS ═══════════ -->
+    <div id="tab-anuncios" class="tab-panel active">
+
+      <div class="card">
+        <h3 id="tituloFormAnuncio">Nuevo anuncio</h3>
+        <input type="hidden" id="anuncioId">
+
+        <label>Tipo</label>
+        <select id="anuncioTipo">
+          <option value="predicador">Predicador de la semana</option>
+          <option value="general">Anuncio general</option>
+        </select>
+
+        <label>Título</label>
+        <input type="text" id="anuncioTitulo" placeholder="Ej: Servicio de Yony Copete">
+
+        <label>Contenido</label>
+        <textarea id="anuncioContenido" placeholder="Escribe el anuncio. Usa **texto** para negrilla y Enter para saltos de línea."></textarea>
+        <p class="help-text">Tip: **así** se muestra en <b>negrilla</b> dentro de la app.</p>
+
+        <div class="switch-row">
+          <input type="checkbox" id="anuncioFlotante">
+          <label style="margin:0">Flotando (aparece como banner en la pantalla de inicio — máx. 2 a la vez)</label>
+        </div>
+        <div class="switch-row">
+          <input type="checkbox" id="anuncioActivo" checked>
+          <label style="margin:0">Activo (visible en la app)</label>
+        </div>
+
+        <div class="row">
+          <button class="primary" onclick="guardarAnuncio()">Guardar anuncio</button>
+          <button class="secondary" onclick="limpiarFormAnuncio()">Cancelar edición</button>
+        </div>
+        <p id="msgAnuncio" class="msg"></p>
+      </div>
+
+      <div class="card">
+        <h3>Anuncios publicados</h3>
+        <div id="listaAnuncios"><p class="empty-text">Cargando…</p></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ EVENTOS ═══════════ -->
+    <div id="tab-eventos" class="tab-panel">
+
+      <div class="card">
+        <h3>Nuevo evento</h3>
+        <label>Etiqueta</label>
+        <input type="text" id="eventoEtiqueta" placeholder="Ej: Servicio de Yony Copete">
+
+        <label>Imagen / flyer</label>
+        <input type="file" id="eventoImagen" accept="image/*">
+        <p class="help-text">Se sube a Google Drive automáticamente.</p>
+
+        <div class="switch-row">
+          <input type="checkbox" id="eventoActivo" checked>
+          <label style="margin:0">Activo (visible en la app)</label>
+        </div>
+
+        <button class="primary" onclick="guardarEvento()">Guardar evento</button>
+        <p id="msgEvento" class="msg"></p>
+      </div>
+
+      <div class="card">
+        <h3>Eventos publicados</h3>
+        <div id="listaEventos"><p class="empty-text">Cargando…</p></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ PETICIONES ═══════════ -->
+    <div id="tab-peticiones" class="tab-panel">
+      <div class="card">
+        <h3>Peticiones de oración recibidas</h3>
+        <div id="listaPeticiones"><p class="empty-text">Cargando…</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
