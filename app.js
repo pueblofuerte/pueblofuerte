@@ -6,6 +6,9 @@
 let anunciosCache = [];
 let eventosCache = [];
 
+const DIAS_PREDICADOR = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+let diasPredicador = []; // [{dia:'Lunes', nombre:'Juan'}, ...]
+
 // ── Llamada genérica al Apps Script ──────────────────────────────────
 // Content-Type "text/plain" evita el preflight CORS que Apps Script no
 // maneja bien; el propio script igual lee el JSON desde postData.contents.
@@ -65,6 +68,15 @@ function cerrarSesion() {
 // Si ya había sesión en este navegador (sessionStorage dura hasta cerrar la pestaña)
 window.addEventListener('DOMContentLoaded', () => {
   if (getClave()) iniciarSesion0();
+  actualizarModoAnuncio();
+
+  const inputNombre = document.getElementById('predicadorNombreInput');
+  inputNombre.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      agregarDiaPredicador();
+    }
+  });
 });
 async function iniciarSesion0() {
   document.getElementById('inputClave').value = getClave();
@@ -80,6 +92,76 @@ function cambiarTab(nombre) {
 // ══════════════════════════════════════════════════════════════════
 // ANUNCIOS
 // ══════════════════════════════════════════════════════════════════
+
+// Muestra/oculta el editor según el tipo de anuncio elegido.
+// Predicador de la semana: se arma día por día y no tiene flotante
+// (la app ya ignora ese campo para este tipo).
+function actualizarModoAnuncio() {
+  const tipo = document.getElementById('anuncioTipo').value;
+  const esPredicador = tipo === 'predicador';
+
+  document.getElementById('contenidoGeneralWrap').style.display = esPredicador ? 'none' : 'block';
+  document.getElementById('contenidoPredicadorWrap').style.display = esPredicador ? 'block' : 'none';
+  document.getElementById('filaFlotante').style.display = esPredicador ? 'none' : 'flex';
+
+  if (esPredicador) {
+    document.getElementById('anuncioFlotante').checked = false;
+  }
+}
+
+function agregarDiaPredicador() {
+  const input = document.getElementById('predicadorNombreInput');
+  const nombre = input.value.trim();
+  if (!nombre) return;
+  if (diasPredicador.length >= DIAS_PREDICADOR.length) return;
+
+  diasPredicador.push({ dia: DIAS_PREDICADOR[diasPredicador.length], nombre });
+  input.value = '';
+  pintarDiasPredicador();
+
+  if (diasPredicador.length >= DIAS_PREDICADOR.length) {
+    input.disabled = true;
+    input.placeholder = 'Ya completaste los 5 días';
+  }
+}
+
+function deshacerUltimoDia() {
+  diasPredicador.pop();
+  const input = document.getElementById('predicadorNombreInput');
+  input.disabled = false;
+  input.placeholder = 'Escribe un nombre y presiona Enter';
+  pintarDiasPredicador();
+}
+
+function pintarDiasPredicador() {
+  const cont = document.getElementById('predicadorLista');
+  cont.innerHTML = diasPredicador.map(d =>
+    `<div class="dia-chip"><strong>${escapeHtml(d.dia)}</strong>: ${escapeHtml(d.nombre)}</div>`
+  ).join('');
+
+  document.getElementById('btnDeshacerDia').style.display = diasPredicador.length > 0 ? 'inline-flex' : 'none';
+
+  // Este textarea sigue siendo la fuente real que se envía al script.
+  document.getElementById('anuncioContenido').value =
+    diasPredicador.map(d => `**${d.dia}**: ${d.nombre}`).join('\n');
+}
+
+// Reconstruye la lista de días a partir de un contenido ya guardado
+// (formato **Día**: Nombre, uno por línea) — para poder editarlo.
+function cargarDiasPredicadorDesdeContenido(contenido) {
+  diasPredicador = [];
+  const lineas = (contenido || '').split('\n');
+  lineas.forEach(linea => {
+    const match = linea.match(/^\*\*(.+?)\*\*:\s*(.*)$/);
+    if (match && DIAS_PREDICADOR.includes(match[1])) {
+      diasPredicador.push({ dia: match[1], nombre: match[2].trim() });
+    }
+  });
+  const input = document.getElementById('predicadorNombreInput');
+  input.disabled = diasPredicador.length >= DIAS_PREDICADOR.length;
+  input.placeholder = input.disabled ? 'Ya completaste los 5 días' : 'Escribe un nombre y presiona Enter';
+  pintarDiasPredicador();
+}
 
 async function cargarAnuncios() {
   const cont = document.getElementById('listaAnuncios');
@@ -110,9 +192,9 @@ function pintarAnuncios() {
         </span>
       </div>
       <div class="actions">
-        <button class="secondary" onclick="editarAnuncio('${a.id}')">Editar</button>
-        <button class="secondary" onclick="toggleAnuncio('${a.id}', ${!a.activo})">${a.activo ? 'Desactivar' : 'Activar'}</button>
-        <button class="danger" onclick="eliminarAnuncio('${a.id}')">Eliminar</button>
+        <button class="btn small" onclick="editarAnuncio('${a.id}')">Editar</button>
+        <button class="btn small" onclick="toggleAnuncio('${a.id}', ${!a.activo})">${a.activo ? 'Desactivar' : 'Activar'}</button>
+        <button class="btn small danger" onclick="eliminarAnuncio('${a.id}')">Eliminar</button>
       </div>
     </div>
   `).join('');
@@ -128,18 +210,31 @@ function editarAnuncio(id) {
   document.getElementById('anuncioFlotante').checked = a.flotante;
   document.getElementById('anuncioActivo').checked = a.activo;
   document.getElementById('tituloFormAnuncio').textContent = 'Editando anuncio';
+
+  actualizarModoAnuncio();
+  if (a.tipo === 'predicador') cargarDiasPredicadorDesdeContenido(a.contenido);
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function limpiarFormAnuncio() {
   document.getElementById('anuncioId').value = '';
-  document.getElementById('anuncioTipo').value = 'predicador';
+  document.getElementById('anuncioTipo').value = 'general';
   document.getElementById('anuncioTitulo').value = '';
   document.getElementById('anuncioContenido').value = '';
   document.getElementById('anuncioFlotante').checked = false;
   document.getElementById('anuncioActivo').checked = true;
   document.getElementById('tituloFormAnuncio').textContent = 'Nuevo anuncio';
   document.getElementById('msgAnuncio').textContent = '';
+
+  diasPredicador = [];
+  const inputNombre = document.getElementById('predicadorNombreInput');
+  inputNombre.value = '';
+  inputNombre.disabled = false;
+  inputNombre.placeholder = 'Escribe un nombre y presiona Enter';
+  pintarDiasPredicador();
+
+  actualizarModoAnuncio();
 }
 
 async function guardarAnuncio() {
@@ -205,8 +300,8 @@ function pintarEventos() {
         <span>${ev.activo ? 'Activo' : 'Inactivo'} · ${escapeHtml(ev.fecha)}</span>
       </div>
       <div class="actions">
-        <button class="secondary" onclick="toggleEvento('${ev.id}', ${!ev.activo})">${ev.activo ? 'Desactivar' : 'Activar'}</button>
-        <button class="danger" onclick="eliminarEvento('${ev.id}')">Eliminar</button>
+        <button class="btn small" onclick="toggleEvento('${ev.id}', ${!ev.activo})">${ev.activo ? 'Desactivar' : 'Activar'}</button>
+        <button class="btn small danger" onclick="eliminarEvento('${ev.id}')">Eliminar</button>
       </div>
     </div>
   `).join('');

@@ -13,8 +13,8 @@
   <img src="logopf.png" alt="Logo Iglesia Pueblo Fuerte" class="logo-login">
   <p class="help-text">Panel administrativo</p>
   <label for="inputClave">Clave de administrador</label>
-  <input type="password" id="inputClave" placeholder="Pégala aquí">
-  <button class="primary" onclick="iniciarSesion()" style="width:100%">Entrar</button>
+  <input type="password" id="inputClave">
+  <button class="btn primary" onclick="iniciarSesion()" style="width:100%">Entrar</button>
   <p id="msgLogin" class="msg"></p>
 </div>
 
@@ -24,7 +24,7 @@
     <div class="topbar-logo">
       <img src="logopf.png" alt="Logo Iglesia Pueblo Fuerte" class="logo-header">
     </div>
-    <button onclick="cerrarSesion()">Cerrar sesión</button>
+    <button class="btn" onclick="cerrarSesion()">Cerrar sesión</button>
   </header>
 
   <div class="container">
@@ -42,30 +42,40 @@
         <input type="hidden" id="anuncioId">
 
         <label>Tipo</label>
-        <select id="anuncioTipo">
+        <select id="anuncioTipo" onchange="actualizarModoAnuncio()">
+          <option value="general" selected>Anuncio general</option>
           <option value="predicador">Predicador de la semana</option>
-          <option value="general">Anuncio general</option>
         </select>
 
         <label>Título</label>
-        <input type="text" id="anuncioTitulo" placeholder="Ej: Servicio de Yony Copete">
+        <input type="text" id="anuncioTitulo">
 
-        <label>Contenido</label>
-        <textarea id="anuncioContenido" placeholder="Escribe el anuncio. Usa **texto** para negrilla y Enter para saltos de línea."></textarea>
-        <p class="help-text">Tip: **así** se muestra en <b>negrilla</b> dentro de la app.</p>
+        <!-- Anuncio general: texto libre -->
+        <div id="contenidoGeneralWrap">
+          <label>Contenido</label>
+          <textarea id="anuncioContenido"></textarea>
+        </div>
 
-        <div class="switch-row">
+        <!-- Predicador de la semana: se arma solo, día por día -->
+        <div id="contenidoPredicadorWrap" style="display:none">
+          <label>Nombre</label>
+          <input type="text" id="predicadorNombreInput" placeholder="Escribe un nombre y presiona Enter">
+          <div id="predicadorLista" class="dias-lista"></div>
+          <button type="button" class="btn small" id="btnDeshacerDia" onclick="deshacerUltimoDia()" style="display:none">Deshacer último</button>
+        </div>
+
+        <div class="switch-row" id="filaFlotante">
           <input type="checkbox" id="anuncioFlotante">
-          <label style="margin:0">Flotando (aparece como banner en la pantalla de inicio — máx. 2 a la vez)</label>
+          <label style="margin:0">Flotante</label>
         </div>
         <div class="switch-row">
           <input type="checkbox" id="anuncioActivo" checked>
-          <label style="margin:0">Activo (visible en la app)</label>
+          <label style="margin:0">Activo</label>
         </div>
 
         <div class="row">
-          <button class="primary" onclick="guardarAnuncio()">Guardar anuncio</button>
-          <button class="secondary" onclick="limpiarFormAnuncio()">Cancelar edición</button>
+          <button class="btn primary" onclick="guardarAnuncio()">Guardar</button>
+          <button class="btn" onclick="limpiarFormAnuncio()">Cancelar</button>
         </div>
         <p id="msgAnuncio" class="msg"></p>
       </div>
@@ -82,18 +92,17 @@
       <div class="card">
         <h3>Nuevo evento</h3>
         <label>Etiqueta</label>
-        <input type="text" id="eventoEtiqueta" placeholder="Ej: Servicio de Yony Copete">
+        <input type="text" id="eventoEtiqueta">
 
         <label>Imagen / flyer</label>
         <input type="file" id="eventoImagen" accept="image/*">
-        <p class="help-text">Se sube a Google Drive automáticamente.</p>
 
         <div class="switch-row">
           <input type="checkbox" id="eventoActivo" checked>
-          <label style="margin:0">Activo (visible en la app)</label>
+          <label style="margin:0">Activo</label>
         </div>
 
-        <button class="primary" onclick="guardarEvento()">Guardar evento</button>
+        <button class="btn primary" onclick="guardarEvento()">Guardar</button>
         <p id="msgEvento" class="msg"></p>
       </div>
 
