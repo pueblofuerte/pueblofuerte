@@ -53,3 +53,17 @@ mientras la pestaña está abierta (`sessionStorage`), no queda en el código.
 | `style.css` | Estilos — misma paleta azul/dorado de la app |
 | `config.js` | El único archivo que editas: la URL de tu Apps Script |
 | `app.js` | Toda la lógica: login, listar/crear/editar/borrar anuncios y eventos, subir flyers |
+
+## Logo
+Coloca tu archivo de logo con el nombre exacto **logopf.png** directamente dentro de esta misma carpeta, al lado de `index.html`, `style.css`, `app.js` y `config.js`.
+
+Ejemplo:
+```text
+pueblofuerte/
+├── index.html
+├── style.css
+├── app.js
+├── config.js
+└── logopf.png
+```
+El mismo logo se mostrará en la pantalla de inicio de sesión y en la parte superior del panel administrativo.
