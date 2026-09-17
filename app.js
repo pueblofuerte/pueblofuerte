@@ -12,7 +12,7 @@ let diasPredicador = []; // [{dia:'Lunes', nombre:'Juan'}, ...]
 // ── Llamada genérica al Apps Script ──────────────────────────────────
 // Content-Type "text/plain" evita el preflight CORS que Apps Script no
 // maneja bien; el propio script igual lee el JSON desde postData.contents.
-async function llamarScript(payload) {
+async function llamarScript(payload, intento = 1) {
   if (!SCRIPT_URL || SCRIPT_URL.indexOf('PEGA_AQUI') !== -1) {
     throw new Error('Falta configurar SCRIPT_URL en config.js');
   }
@@ -22,7 +22,20 @@ async function llamarScript(payload) {
     body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Error de red: ' + res.status);
-  return res.json();
+  const data = await res.json();
+
+  // Apps Script a veces "pierde" el cuerpo del POST al seguir su propia
+  // redirección interna, y el script responde como si no hubiera acción.
+  // Cuando pasa, reintentamos una vez automáticamente antes de mostrar error.
+  const pareceRedireccionRota = !data.ok && typeof data.error === 'string' &&
+    data.error.indexOf('Acción no reconocida') !== -1;
+
+  if (pareceRedireccionRota && intento < 3) {
+    await new Promise(r => setTimeout(r, 400));
+    return llamarScript(payload, intento + 1);
+  }
+
+  return data;
 }
 
 function getClave() {
@@ -185,8 +198,8 @@ function pintarAnuncios() {
       <div class="info">
         <strong>${escapeHtml(a.titulo)}</strong>
         <span>
-          <span class="badge ${a.tipo === 'predicador' ? '' : 'gris'}">${a.tipo === 'predicador' ? 'PREDICADOR' : 'GENERAL'}</span>
-          ${a.flotante ? '<span class="badge dorado">FLOTANTE</span>' : ''}
+          <span class="badge ${a.tipo === 'predicador' ? '' : 'dorado'}">${a.tipo === 'predicador' ? 'PREDICADOR' : 'GENERAL'}</span>
+          ${a.flotante ? '<span class="badge roja">FLOTANTE</span>' : ''}
           ${a.activo ? '' : '<span class="badge gris">INACTIVO</span>'}
           · ${escapeHtml(a.fecha)}
         </span>
@@ -295,6 +308,7 @@ function pintarEventos() {
   }
   cont.innerHTML = eventosCache.map(ev => `
     <div class="list-item">
+      <img class="evento-thumb" src="${escapeHtml(ev.imagenUrl)}" alt="">
       <div class="info">
         <strong>${escapeHtml(ev.etiqueta)}</strong>
         <span>${ev.activo ? 'Activo' : 'Inactivo'} · ${escapeHtml(ev.fecha)}</span>
@@ -314,6 +328,15 @@ function leerArchivoComoBase64(file) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+// Muestra el flyer elegido antes de subirlo, para confirmar que es el correcto.
+function previsualizarFlyer(input) {
+  const preview = document.getElementById('previewFlyer');
+  const archivo = input.files[0];
+  if (!archivo) { preview.style.display = 'none'; return; }
+  preview.src = URL.createObjectURL(archivo);
+  preview.style.display = 'block';
 }
 
 async function guardarEvento() {
@@ -340,6 +363,7 @@ async function guardarEvento() {
     msg.textContent = 'Evento guardado ✓'; msg.className = 'msg ok';
     document.getElementById('eventoEtiqueta').value = '';
     document.getElementById('eventoImagen').value = '';
+    document.getElementById('previewFlyer').style.display = 'none';
     cargarEventos();
   } catch (e) {
     msg.textContent = 'Error: ' + e.message; msg.className = 'msg error';
