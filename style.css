@@ -1,23 +1,14 @@
 :root {
-  /* Misma paleta que colors.xml de la app Android */
   --primary: #025BC3;
   --primary-dark: #013F87;
-  --primary-tint: #2E7BD6;   /* neumorph_primary_tint */
   --primary-light: #EAF2FC;
-  --accent: #FDC108;         /* dorado — acento puntual */
-  --red: #DC4B34;            /* rojo del logo — acento puntual */
-
-  --bg: #F5FBFF;             /* surface_color: blanco con toque azul */
+  --accent: #FDC108;
+  --red: #DC4B34;
+  --bg: #F5F8FC;
   --card: #FFFFFF;
   --text: #1A2733;
   --text-muted: #6B7A8A;
-  --border: #E3EDF7;
-
-  /* neumorph_surface_tint / neumorph_surface_shade / neumorph_shadow / neumorph_light */
-  --neu-tint: #FFFFFF;
-  --neu-shade: #E7F0F9;
-  --neu-shadow: rgba(10, 46, 82, .14);
-  --neu-light: #FFFFFF;
+  --border: #D9E1EA;
 }
 
 * {
@@ -37,62 +28,37 @@ body {
   line-height: 1.45;
 }
 
-/* ── Halo circular detrás del logo, como el halo del play de Radio ── */
-.logo-halo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #26025BC3; /* mismo halo translúcido azul que bg_radio_play_halo */
-  border: 1px solid #55025BC3;
-  flex-shrink: 0;
-}
-
-.logo-halo-login {
-  display: flex;
-  width: 116px;
-  height: 116px;
-  margin: 0 auto 20px;
-}
-
-.logo-login {
-  width: 84px;
-  height: 84px;
-  object-fit: contain;
-}
-
-.topbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 42px;
-}
-
-.topbar-brand {
-  color: var(--primary);
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.logo-header {
-  display: block;
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-}
-
 /* Barra superior */
 header.topbar {
-  background: var(--card);
-  color: var(--text);
+  background: var(--primary);
+  color: #fff;
   padding: 0 24px;
   min-height: 62px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+header.topbar h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+header.topbar button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.75);
+  padding: 7px 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+header.topbar button:hover {
+  background: rgba(255,255,255,.10);
 }
 
 /* Contenido */
@@ -110,9 +76,18 @@ header.topbar {
   margin: 90px auto 30px;
   background: var(--card);
   padding: 30px;
-  border-radius: 18px;
-  box-shadow: 8px 8px 18px var(--neu-shadow), -8px -8px 18px var(--neu-light);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.06);
   text-align: left;
+}
+
+.login-box h2 {
+  margin: 0 0 4px;
+  color: var(--primary);
+  font-size: 23px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .login-box .help-text {
@@ -120,46 +95,48 @@ header.topbar {
   margin: 0 0 24px;
 }
 
-/* Pestañas — como el BottomNavigationView: activa en azul con ícono blanco */
+.login-box .primary {
+  width: 100%;
+}
+
+/* Pestañas */
 .tabs {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 0;
   margin-bottom: 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .tab-btn {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: var(--neu-tint);
-  color: var(--primary);
+  background: #fff;
+  color: var(--text-muted);
   border: 0;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 13px;
-  font-weight: 600;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 4px 4px 10px var(--neu-shadow), -4px -4px 10px var(--neu-light);
-  transition: box-shadow .15s ease, background .15s ease, color .15s ease;
 }
 
-.tab-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+.tab-btn:last-child {
+  border-right: 0;
 }
 
 .tab-btn:hover {
-  color: var(--primary-dark);
+  background: #fafbfd;
+  color: var(--text);
 }
 
 .tab-btn.active {
-  background: linear-gradient(145deg, var(--primary-tint), var(--primary));
-  color: #fff;
-  box-shadow: inset 2px 2px 6px var(--primary-dark), inset -2px -2px 6px var(--primary-tint);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .tab-panel {
@@ -170,48 +147,20 @@ header.topbar {
   display: block;
 }
 
-/* Tarjetas — planas, el relieve se reserva para botones y superficies clave */
+/* Tarjetas */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 6px;
   padding: 22px;
   margin-bottom: 18px;
 }
 
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--primary-light);
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-.card-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
 .card h3 {
-  margin: 0;
+  margin: 0 0 18px;
   color: var(--text);
   font-size: 17px;
   font-weight: 600;
-}
-
-.card > h3 {
-  margin: 0 0 18px;
 }
 
 /* Formularios */
@@ -231,7 +180,7 @@ select {
   width: 100%;
   padding: 10px 11px;
   border: 1px solid #C8D1DB;
-  border-radius: 8px;
+  border-radius: 4px;
   background: #fff;
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
@@ -257,34 +206,13 @@ input[type="file"] {
   padding: 8px;
 }
 
-.flyer-preview {
-  display: block;
-  max-width: 100%;
-  max-height: 220px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  object-fit: contain;
-}
-
-.evento-thumb {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
-  object-fit: cover;
-  background: var(--bg);
-  flex-shrink: 0;
-}
-
 /* Separación entre campos */
 .card > label,
 .card > input[type="text"],
 .card > input[type="password"],
 .card > input[type="file"],
 .card > textarea,
-.card > select,
-.card > #contenidoGeneralWrap,
-.card > #contenidoPredicadorWrap {
+.card > select {
   margin-bottom: 15px;
 }
 
@@ -309,81 +237,51 @@ input[type="file"] {
   line-height: 1.35;
 }
 
-/* Predicador de la semana — lista de días */
-.dias-lista {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.dia-chip {
-  background: var(--primary-light);
-  border-radius: 20px;
-  padding: 7px 14px;
-  font-size: 13px;
-  color: var(--text);
-}
-
-.dia-chip strong {
-  color: var(--primary);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   BOTONES — mismo relieve que "botones principales del Home":
-   cara azul con tint/face/shade, o superficie neutra en relieve.
-   ══════════════════════════════════════════════════════════════ */
+/* Botones */
 button {
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--neu-tint);
-  color: var(--text);
-  border: 0;
-  padding: 10px 18px;
-  border-radius: 12px;
+button.primary {
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+  padding: 10px 16px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 5px 5px 12px var(--neu-shadow), -5px -5px 12px var(--neu-light);
-  transition: box-shadow .12s ease, transform .12s ease;
 }
 
-.btn:hover {
-  box-shadow: 3px 3px 8px var(--neu-shadow), -3px -3px 8px var(--neu-light);
+button.primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
 }
 
-.btn:active {
-  box-shadow: inset 3px 3px 8px var(--neu-shadow), inset -3px -3px 8px var(--neu-light);
-  transform: translateY(1px);
+button.secondary {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #C8D1DB;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.btn.primary {
-  color: #fff;
-  background: linear-gradient(145deg, var(--primary-tint), var(--primary));
-  box-shadow: 5px 5px 12px var(--neu-shadow), -3px -3px 10px rgba(255,255,255,.6);
+button.secondary:hover {
+  background: #F6F8FA;
 }
 
-.btn.primary:hover {
-  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
-}
-
-.btn.primary:active {
-  box-shadow: inset 3px 3px 8px var(--primary-dark), inset -2px -2px 6px var(--primary-tint);
-}
-
-.btn.danger {
+button.danger {
+  background: #fff;
   color: var(--red);
+  border: 1px solid var(--red);
+  padding: 7px 11px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
-.btn.small {
-  padding: 7px 12px;
-  font-size: 12px;
-  border-radius: 9px;
+button.danger:hover {
+  background: #FFF3F0;
 }
 
 .row {
@@ -394,15 +292,6 @@ button {
   margin-top: 18px;
 }
 
-/* Paneles "hundidos" — mismo truco que la franja de estado de Radio:
-   el hueco hace que el contenido de arriba parezca sobresalir. */
-.lista-hundida {
-  border-radius: 12px;
-  background: var(--bg);
-  box-shadow: inset 3px 3px 8px var(--neu-shadow), inset -3px -3px 8px var(--neu-light);
-  padding: 6px 16px;
-}
-
 /* Listas */
 .list-item {
   display: flex;
@@ -410,15 +299,16 @@ button {
   align-items: center;
   gap: 18px;
   padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #E8EDF2;
 }
 
 .list-item:first-child {
-  padding-top: 14px;
+  padding-top: 0;
 }
 
 .list-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .list-item .info {
@@ -445,8 +335,7 @@ button {
   flex-shrink: 0;
 }
 
-/* Etiquetas pequeñas — igual criterio que bg_anuncio_tipo_badge:
-   dorado para anuncio general, azul para predicador, rojo para flotante. */
+/* Etiquetas pequeñas */
 .badge {
   display: inline-block;
   font-size: 10px;
@@ -467,10 +356,6 @@ button {
 .badge.dorado {
   background: var(--accent);
   color: #6b4e00;
-}
-
-.badge.roja {
-  background: var(--red);
 }
 
 /* Mensajes */
@@ -510,28 +395,8 @@ button {
     gap: 14px;
   }
 
-  .logo-halo {
-    width: 38px;
-    height: 38px;
-  }
-
-  .logo-header {
-    width: 22px;
-    height: 22px;
-  }
-
-  .topbar-brand {
+  header.topbar h1 {
     font-size: 16px;
-  }
-
-  .logo-halo-login {
-    width: 96px;
-    height: 96px;
-  }
-
-  .logo-login {
-    width: 68px;
-    height: 68px;
   }
 
   .container {
@@ -548,7 +413,7 @@ button {
   }
 
   .tab-btn {
-    min-width: 100px;
+    min-width: 110px;
     flex: 0 0 auto;
   }
 
@@ -565,7 +430,7 @@ button {
     width: 100%;
   }
 
-  .actions .btn {
+  .actions button {
     flex: 1;
   }
 
@@ -574,7 +439,7 @@ button {
     align-items: stretch;
   }
 
-  .row .btn {
+  .row button {
     width: 100%;
   }
 }
